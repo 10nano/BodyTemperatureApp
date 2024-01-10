@@ -16,7 +16,7 @@
             }
             else
             {
-                throw new Exception($" \"{bodyTemp}\" jest poza zakresem termometru.");
+                throw new Exception($"Podana wartość temperatury \"{bodyTemp}\" jest poza zakresem termometru.");
             }
         }
 

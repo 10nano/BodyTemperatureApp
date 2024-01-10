@@ -2,7 +2,7 @@
 {
     public class PatientInFile : PatientBase
     {
-        private string fileName;
+        protected internal string fileName;
 
         public PatientInFile(string name)
             : base(name)
@@ -14,15 +14,21 @@
         {
             if (bodyTemp >= MinScaleTemp && bodyTemp <= MaxScaleTemp)
             {
-                using (var writer = File.AppendText(fileName))
+                if (File.Exists($"{fileName}"))
                 {
-                    writer.WriteLine(bodyTemp);
+                    throw new Exception($"UWAGA plik: {fileName} istnieje\n" +
+                        "Pomiary zostaną dodane do istniejącego pliku");
+                    ; // Dopisywanie do istniejącego pliku
                 }
 
+                    using (var writer = File.AppendText(fileName))
+                    {
+                        writer.WriteLine(bodyTemp);
+                    }
             }
             else
             {
-                throw new Exception($"Score value: {bodyTemp} is out of range");
+                throw new Exception($"Podana wartość temperatury: \"{bodyTemp}\" jest poza zakresem termometru");
             }
         }
 

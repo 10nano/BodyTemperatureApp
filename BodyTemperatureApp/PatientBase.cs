@@ -27,7 +27,7 @@
             }
             else
             {
-                throw new Exception($" \"{bodyTemp}\" nie jest wartością temperatury");
+                throw new Exception($"Podana wartość: \"{bodyTemp}\" nie jest wartością temperatury");
             }
         }
 
