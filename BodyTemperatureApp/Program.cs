@@ -22,11 +22,6 @@ var screen = new Screen();
 PatientInMemory patientMemory;
 PatientInFile patientFile;
 
-{
-    screen.ColorWrite(myEvent, "\nProszę natychmiast zgłosić się do lekarza\n" +
-                                "Podana temperatura jest niebezpieczna dla życia Pacjenta");
-}
-
 string inputName = "";
 
 var showMainMenu = true;
