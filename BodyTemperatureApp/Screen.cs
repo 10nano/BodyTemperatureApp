@@ -2,13 +2,6 @@
 {
     public class Screen : IScreen
     {
-        public readonly ConsoleColor myBlue = ConsoleColor.DarkBlue;
-        public readonly ConsoleColor myBlack = ConsoleColor.Black;
-        public readonly ConsoleColor myWhite = ConsoleColor.White;
-        public readonly ConsoleColor myGreen = ConsoleColor.DarkGreen;
-        public readonly ConsoleColor myYellow = ConsoleColor.DarkYellow;
-        public readonly ConsoleColor myMagenta = ConsoleColor.DarkMagenta;
-
 
         public void ColorWrite(ConsoleColor fgColor, ConsoleColor bgColor, string text)
         {
@@ -24,12 +17,16 @@
             Console.ResetColor();
 
         }
+        public void NewLine()
+        {
+            Console.WriteLine();
+        }
+
         public void ClsAppHeader(ConsoleColor fgColor, ConsoleColor bgColor, string text)
         {
             Console.Clear();
             Console.WriteLine();
             ColorWrite(fgColor, bgColor, text);
-            Console.WriteLine();
         }
 
     }

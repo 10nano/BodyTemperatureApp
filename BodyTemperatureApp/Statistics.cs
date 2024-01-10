@@ -17,6 +17,7 @@
                 return Sum / Count;
             }
         }
+
         public Statistics()
         {
             Count = 0;

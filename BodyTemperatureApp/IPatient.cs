@@ -7,8 +7,8 @@
         void AddBodyTemp(float bodyTemp);
         void AddBodyTemp(int bodyTemp);
         void AddBodyTemp(string bodyTemp);
+        void PrintAllBodyTemps(Screen screen);
 
         Statistics GetStatistics();
-
     }
 }

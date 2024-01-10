@@ -3,11 +3,11 @@
     public class PatientInFile : PatientBase
     {
         private string fileName;
-        private string fileNameSufix = "_BodyTemp.txt";
+
         public PatientInFile(string name)
             : base(name)
         {
-            fileName = name + fileNameSufix;
+            fileName = $"{name}_BodyTemp.txt";
         }
        
         public override void AddBodyTemp(float bodyTemp)
@@ -24,6 +24,16 @@
             {
                 throw new Exception($"Score value: {bodyTemp} is out of range");
             }
+        }
+
+        public override void PrintAllBodyTemps(Screen screen)
+        {
+            var bodyTempsFromFile = ReadTempsFromFile();
+            foreach (var bodyTemp in bodyTempsFromFile)
+            {
+                screen.ColorWrite(ConsoleColor.Green, $"{bodyTemp} ");
+            }
+
         }
 
         public override Statistics GetStatistics()
@@ -61,7 +71,6 @@
 
             return statistics;
         }
-
     }
 }
 

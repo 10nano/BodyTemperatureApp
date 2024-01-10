@@ -27,9 +27,11 @@
             }
             else
             {
-                throw new Exception($" {bodyTemp} nie jest wartością temperatury");
+                throw new Exception($" \"{bodyTemp}\" nie jest wartością temperatury");
             }
         }
+
+        public abstract void PrintAllBodyTemps(Screen screen);
 
         public abstract Statistics GetStatistics();
     }

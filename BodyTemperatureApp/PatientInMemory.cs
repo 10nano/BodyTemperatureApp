@@ -16,8 +16,16 @@
             }
             else
             {
-                throw new Exception($" {bodyTemp} jest poza zakresem termometru.");
+                throw new Exception($" \"{bodyTemp}\" jest poza zakresem termometru.");
             }
+        }
+
+        public override void PrintAllBodyTemps(Screen screen)
+        {
+            foreach (var bodyTemp in bodyTempMeasures)
+            {
+                screen.ColorWrite(ConsoleColor.Green,$"{bodyTemp} ");
+            }  
         }
 
         public override Statistics GetStatistics()
@@ -30,7 +38,5 @@
             }
             return statistics;
         }
-
-
     }
 }
