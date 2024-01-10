@@ -6,12 +6,18 @@
 
         public PatientInMemory(string name)
             : base(name)
-        {  
+        {
         }
         public override void AddBodyTemp(float bodyTemp)
         {
             if (bodyTemp >= MinScaleTemp && bodyTemp <= MaxScaleTemp)
             {
+                if (bodyTemp <= Hipotherm || bodyTemp >= Hipertherm)
+                {
+                    Console.Write("\n\nProszę natychmiast zgłosić się do lekarza\n" +
+                    $"Temperatura: {bodyTemp} jest niebezpieczna dla życia Pacjenta\n\n");
+                }
+
                 bodyTempMeasures.Add(bodyTemp);
             }
             else
@@ -24,8 +30,8 @@
         {
             foreach (var bodyTemp in bodyTempMeasures)
             {
-                screen.ColorWrite(ConsoleColor.Green,$"{bodyTemp} ");
-            }  
+                screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp} ");
+            }
         }
 
         public override Statistics GetStatistics()

@@ -3,29 +3,38 @@
 const ConsoleColor mySubHeader = ConsoleColor.DarkBlue;
 const ConsoleColor myOption = ConsoleColor.DarkYellow;
 const ConsoleColor myInput = ConsoleColor.DarkGreen;
-const ConsoleColor myHeaderBgground = ConsoleColor.Yellow;
-const ConsoleColor myHeaderFrground = ConsoleColor.Black;
+const ConsoleColor myStats = ConsoleColor.Magenta;
+const ConsoleColor myExcept = ConsoleColor.Red;
+const ConsoleColor myEvent = ConsoleColor.DarkRed;
+const ConsoleColor myHdBkground = ConsoleColor.Yellow;
+const ConsoleColor myHdFrground = ConsoleColor.Black;
 
-const String progName = "\"Statystyki z pomiarów temperatury ciała\"";
+const string progName = "\"Statystyki z pomiarów temperatury ciała\"";
+const string appHeader = $"Witamy w programie {progName}\n";
 
-const String appHeader = $"Witamy w programie {progName}\n";
-
-const String CorrTempAdult =
+const string CorrTempAdult =
     "╔═══════════════════════════════════════╗\n" +
     "║ Temperatura ciała dorosłego człowieka ║\n" +
     "╚═══════════════════════════════════════╝\n";
 
 var screen = new Screen();
-String inputName = null;
-PatientInMemory patientMemory = null;
-PatientInFile patientFile = null;
+
+PatientInMemory patientMemory;
+PatientInFile patientFile;
+
+{
+    screen.ColorWrite(myEvent, "\nProszę natychmiast zgłosić się do lekarza\n" +
+                                "Podana temperatura jest niebezpieczna dla życia Pacjenta");
+}
+
+string inputName = "";
 
 var showMainMenu = true;
 
 while (showMainMenu)
 {
     Console.Clear();
-    screen.ClsAppHeader(myHeaderFrground, myHeaderBgground, appHeader);
+    screen.ClsAppHeader(myHdFrground, myHdBkground, appHeader);
     screen.NewLine();
     screen.ColorWrite(mySubHeader, $"Uruchom program, zapisując dane: \n");
     screen.ColorWrite(myOption, "1) W pamięci ulotnej komputera\n");
@@ -62,25 +71,26 @@ static void MenuInMemory(Screen screen, PatientInMemory patient)
 
     while (showMenu)
     {
-        screen.ClsAppHeader(myHeaderFrground, myHeaderBgground, $"Program {progName} - dane zapisywane w pamięci\n");
+        screen.ClsAppHeader(myHdFrground, myHdBkground, $"Program {progName} - dane zapisywane w pamięci\n");
         screen.NewLine();
         screen.ColorWrite(myOption, "1) Podaj kolejne wartości temperatury ciała,\n");
         screen.ColorWrite(myOption, "2) Wyświetl wszystkie wprowadzone wartości temperatury\n");
         screen.ColorWrite(myOption, "3) Wyświetl statystyki z wprowadzonych wartości\n");
         screen.ColorWrite(myOption, "E) Wróć do poprzedniego menu\n");
         screen.NewLine();
-        screen.ColorWrite(myInput,$"Pacjent {patient.Name}");
-        screen.NewLine();
+        screen.ColorWrite(myInput, $"Pacjent {patient.Name} \n");
+
         screen.ColorWrite(mySubHeader, "\r\nWybierz opcję: ");
 
         switch (Console.ReadLine().ToUpper())
         {
             case "1": // Podaj kolejne wartości temperatury ciała
-                String inputString = null;
+                string inputString;
                 screen.NewLine();
+                screen.ColorWrite(myOption, "Podawanie kolejnych wartości kończy ENTER\n\n");
                 while (true)
                 {
-                    screen.ColorWrite(myInput, "Dodaj poprawnie zmierzoną temperaturę ciała: ");
+                    screen.ColorWrite(myInput, "Podaj poprawnie zmierzoną temperaturę ciała: ");
                     inputString = Console.ReadLine();
                     if (inputString == "")
                     {
@@ -92,43 +102,53 @@ static void MenuInMemory(Screen screen, PatientInMemory patient)
                     }
                     catch (Exception exc)
                     {
-                        Console.WriteLine($" Niepoprawne dane: {exc.Message}");
+                        screen.ColorWrite(myExcept, $"Niepoprawne dane: {exc.Message} \n");
                     }
                 }
                 break;
             case "2": // Wyświetl wszystkie wprowadzone wartości temperatury
+                screen.NewLine();
                 patient.PrintAllBodyTemps(screen);
+                screen.ColorWrite(myOption, "\n\nNaciśnij dowolny klawisz");
                 Console.ReadKey();
                 break;
             case "3": // Wyświetl statystyki z wprowadzonych wartości
                 var statistics = patient.GetStatistics();
-                Console.WriteLine();
-                Console.WriteLine($"Minimalna: {statistics.Min}");
-                Console.WriteLine($"Maksymalna: {statistics.Max}");
-                if (statistics.Count > 1)
+                if (statistics.Count == 0)
                 {
-                    if (statistics.Rises && statistics.NotRises) // both true
-                    {
-                        Console.WriteLine(" To się nie powinno zdarzyć ");
-                    }
-                    else if (statistics.Rises) // ! NotRises
-                    {
-                        Console.WriteLine(" Temperatura WZRASTA !!!");
-                    }
-                    else if (statistics.NotRises) // ! Rises
-                    {
-                        Console.WriteLine(" Temperatura nie wzrasta ");
-                    }
-                    else // ! Rises && ! NotRises
-                    {
-                        Console.WriteLine(" Temperatura \"skacze\"");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Zbyt mało pomiarów, aby określić tendencję");
+                    screen.ColorWrite(myEvent,"Brak pomiarów temperatury");
+                    Console.ReadKey();
+                    break;
                 }
 
+                    screen.NewLine();
+                    screen.ColorWrite(myStats, $"Temperatura minimalna: {statistics.Min}\n");
+                    screen.ColorWrite(myStats, $"Temperatura maksymalna: {statistics.Max}\n");
+                    if (statistics.Count > 1)
+                    {
+                        if (statistics.Rises && statistics.NotRises) // both true
+                        {
+                            screen.ColorWrite(myStats, " To się nie powinno zdarzyć \n");
+                        }
+                        else if (statistics.Rises) // ! NotRises
+                        {
+                            screen.ColorWrite(myStats, " Temperatura WZRASTA !!!\n");
+                        }
+                        else if (statistics.NotRises) // ! Rises
+                        {
+                            screen.ColorWrite(myStats, " Temperatura nie wzrasta \n");
+                        }
+                        else // ! Rises && ! NotRises
+                        {
+                            screen.ColorWrite(myStats, " Temperatura \"skacze\"\n");
+                        }
+                    }
+                    else
+                    {
+                        screen.ColorWrite(myStats, "Zbyt mało pomiarów, aby określić tendencję\n");
+                    }
+                
+                screen.ColorWrite(myOption, "\n\nNaciśnij dowolny klawisz");
                 Console.ReadKey();
                 break;
             case "E": // Wróć do poprzedniego menu
@@ -148,7 +168,7 @@ static void MenuInFile(Screen screen, PatientInFile patient)
 
     while (showMenu)
     {
-        screen.ClsAppHeader(myHeaderFrground, myHeaderBgground, $"Program {progName} - dane zapisywane na dysku\n");
+        screen.ClsAppHeader(myHdFrground, myHdBkground, $"Program {progName} - dane zapisywane na dysku\n");
         screen.NewLine();
         screen.ColorWrite(myOption, "1) Dopisz kolejne wartości temperatury ciała,\n");
         screen.ColorWrite(myOption, "2) Wyświetl wszystkie wartości temperatury z pliku\n");
@@ -156,13 +176,13 @@ static void MenuInFile(Screen screen, PatientInFile patient)
         screen.ColorWrite(myOption, "E) Wróć do poprzedniego menu\n");
         screen.NewLine();
         screen.ColorWrite(myInput, $"Pacjent {patient.Name}, nazwa pliku: {patient.fileName}");
-        screen.NewLine();
+
         screen.ColorWrite(mySubHeader, "\r\nWybierz opcję: ");
 
         switch (Console.ReadLine().ToUpper())
         {
             case "1": // Dopisz kolejne wartości temperatury ciała
-                String inputString = null;
+                string inputString;
                 screen.NewLine();
                 while (true)
                 {
@@ -178,35 +198,38 @@ static void MenuInFile(Screen screen, PatientInFile patient)
                     }
                     catch (Exception exc)
                     {
-                        Console.WriteLine($" Niepoprawne dane: {exc.Message}");
+                        screen.ColorWrite(myExcept, $" Niepoprawne dane: {exc.Message}\n");
                     }
                 }
                 break;
             case "2": // Wyświetl wszystkie wartości temperatury z pliku
+                screen.NewLine();
                 patient.PrintAllBodyTemps(screen);
+                screen.ColorWrite(myOption, "\n\nNaciśnij dowolny klawisz");
                 Console.ReadKey();
                 break;
             case "3": // Wyświetl statystyki z wprowadzonych wartości
                 var statistics = patient.GetStatistics();
-                Console.WriteLine();
-                Console.WriteLine($"Minimalna: {statistics.Min}");
-                Console.WriteLine($"Maksymalna: {statistics.Max}");
+                screen.NewLine();
+                screen.ColorWrite(myStats, $"Minimalna: {statistics.Min} \n");
+                screen.ColorWrite(myStats, $"Maksymalna: {statistics.Max}\n");
                 if (statistics.Rises && statistics.NotRises)
                 {
-                    Console.WriteLine(" Temperatura skacze ");
+                    screen.ColorWrite(myStats, "# Temperatura skacze \n");
                 }
                 else if (statistics.Rises)
                 {
-                    Console.WriteLine(" Temperatura ROŚNIE !!!");
+                    screen.ColorWrite(myStats, "# Temperatura ROŚNIE !!!\n");
                 }
                 else if (statistics.NotRises)
                 {
-                    Console.WriteLine(" Temperatura Nie rośnie ");
+                    screen.ColorWrite(myStats, "# Temperatura Nie rośnie \n");
                 }
                 else
                 {
-                    Console.WriteLine(" Temperatura zarówno rosła jak i malała");
+                    screen.ColorWrite(myStats, "# Temperatura zarówno rosła jak i malała \n");
                 }
+                screen.ColorWrite(myOption, "\n\nNaciśnij dowolny klawisz");
                 Console.ReadKey();
                 break;
             case "E": // Wróć do poprzedniego menu

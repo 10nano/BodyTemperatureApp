@@ -1,4 +1,6 @@
-﻿namespace BodyTemperatureApp
+﻿using static BodyTemperatureApp.PatientBase;
+
+namespace BodyTemperatureApp
 {
     public interface IPatient
     {

@@ -9,11 +9,17 @@
         {
             fileName = $"{name}_BodyTemp.txt";
         }
-       
+
         public override void AddBodyTemp(float bodyTemp)
         {
             if (bodyTemp >= MinScaleTemp && bodyTemp <= MaxScaleTemp)
             {
+                if (bodyTemp <= Hipotherm || bodyTemp >= Hipertherm)
+                {
+                    Console.Write("\n\nProszę natychmiast zgłosić się do lekarza\n" +
+                    $"Temperatura: {bodyTemp} jest niebezpieczna dla życia Pacjenta\n\n");
+                }
+
                 if (File.Exists($"{fileName}"))
                 {
                     throw new Exception($"UWAGA plik: {fileName} istnieje\n" +
@@ -21,10 +27,10 @@
                     ; // Dopisywanie do istniejącego pliku
                 }
 
-                    using (var writer = File.AppendText(fileName))
-                    {
-                        writer.WriteLine(bodyTemp);
-                    }
+                using (var writer = File.AppendText(fileName))
+                {
+                    writer.WriteLine(bodyTemp);
+                }
             }
             else
             {
@@ -37,7 +43,7 @@
             var bodyTempsFromFile = ReadTempsFromFile();
             foreach (var bodyTemp in bodyTempsFromFile)
             {
-                screen.ColorWrite(ConsoleColor.Green, $"{bodyTemp} ");
+                screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp} ");
             }
 
         }

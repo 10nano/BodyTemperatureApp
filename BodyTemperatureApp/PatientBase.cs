@@ -4,6 +4,8 @@
     {
         public readonly float MinScaleTemp = 35f;
         public readonly float MaxScaleTemp = 42.5f;
+        public readonly float Hipotherm = 35f;
+        public readonly float Hipertherm = 40f;
 
         public PatientBase(string name)
         {
