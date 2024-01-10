@@ -18,6 +18,11 @@
             }
         }
 
+        //  "//wzarsta// =utrzymuje się== \\spada\\"
+
+        // histereza 0.3
+
+
         public Statistics()
         {
             Count = 0;

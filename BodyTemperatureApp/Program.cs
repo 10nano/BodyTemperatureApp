@@ -23,11 +23,6 @@ String inputName = null;
 PatientInMemory patientMemory = null;
 PatientInFile patientFile = null;
 
-
-//  "//wzarsta// =utrzymuje się== \\spada\\"
-
-// histereza 0.3
-
 var showMainMenu = true;
 
 while (showMainMenu)
@@ -51,15 +46,15 @@ while (showMainMenu)
 
     switch (inputKey)
     {
-        case "1":
+        case "1": // Uruchom program w pamięci ulotnej komputera
             patientMemory = new PatientInMemory(inputName);
             MenuInMemory(screen, patientMemory);
             break;
-        case "2":
+        case "2": // Uruchom program w pliku na dysku komputera
             patientFile = new PatientInFile(inputName);
             MenuInFile(screen, patientFile);
             break;
-        case "E":
+        case "E": // Wyjdź z programu
             return;
     }
 }
@@ -83,8 +78,7 @@ static void MenuInMemory(Screen screen, PatientInMemory patient)
 
         switch (Console.ReadLine().ToUpper())
         {
-            case "1": // Dodaj kolejne wartości temperatury ciała
-                      // wyświetl statystyki z wprowadzonych wartości
+            case "1": // Podaj kolejne wartości temperatury ciała
                 String inputString = null;
                 screen.NewLine();
                 while (true)
@@ -109,7 +103,7 @@ static void MenuInMemory(Screen screen, PatientInMemory patient)
                 patient.PrintAllBodyTemps(screen);
                 Console.ReadKey();
                 break;
-            case "3": // STATISTICS
+            case "3": // Wyświetl statystyki z wprowadzonych wartości
                 var statistics = patient.GetStatistics();
                 Console.WriteLine();
                 Console.WriteLine($"Średnia ocena: {statistics.Average:N2}");
@@ -117,9 +111,8 @@ static void MenuInMemory(Screen screen, PatientInMemory patient)
                 Console.WriteLine($"Maksymalna: {statistics.Max}");
                 Console.ReadKey();
                 break;
-            case "E": // EXIT
+            case "E": // Wróć do poprzedniego menu
                 showMenu = false;
-                // Environment.Exit(0);
                 break;
             default:
                 showMenu = true;
@@ -148,7 +141,7 @@ static void MenuInFile(Screen screen, PatientInFile patient)
 
         switch (Console.ReadLine().ToUpper())
         {
-            case "1":
+            case "1": // Dopisz kolejne wartości temperatury ciała
                 String inputString = null;
                 screen.NewLine();
                 while (true)
@@ -169,11 +162,11 @@ static void MenuInFile(Screen screen, PatientInFile patient)
                     }
                 }
                 break;
-            case "2":
+            case "2": // Wyświetl wszystkie wartości temperatury z pliku
                 patient.PrintAllBodyTemps(screen);
                 Console.ReadKey();
                 break;
-            case "3":
+            case "3": // Wyświetl statystyki z wprowadzonych wartości
                 var statistics = patient.GetStatistics();
                 Console.WriteLine();
                 Console.WriteLine($"Średnia ocena: {statistics.Average:N2}");
@@ -181,9 +174,8 @@ static void MenuInFile(Screen screen, PatientInFile patient)
                 Console.WriteLine($"Maksymalna: {statistics.Max}");
                 Console.ReadKey();
                 break;
-            case "E":
+            case "E": // Wróć do poprzedniego menu
                 showMenu = false;
-                // Environment.Exit(0);
                 break;
             default:
                 showMenu = true;
