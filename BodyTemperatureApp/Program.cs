@@ -13,12 +13,18 @@ const ConsoleColor myHdFrground = ConsoleColor.Black;
 const string progName = "\"Statystyki z pomiarów temperatury ciała\"";
 const string appHeader = $"Witamy w programie {progName}\n";
 
-const string CorrTempAdult =
-    "╔═══════════════════════════════════════╗\n" +
-    "║ Temperatura ciała dorosłego człowieka ║\n" +
-    "╚═══════════════════════════════════════╝\n";
+const string pressAnyKey = "\n\nNaciśnij dowolny klawisz";
+const string chooseOption = "\n\nNaciśnij dowolny klawisz";
 
-var screen = new Screen();
+static string PatientName(Screen screen)
+{
+    screen.NewLine();
+    screen.ColorWrite(myInput, "Podaj imię lub nazwisko pacjenta: ");
+    var name = Console.ReadLine();
+    return name;
+}
+
+Screen screen = new Screen();
 
 PatientInMemory patientMemory;
 PatientInFile patientFile;
@@ -36,7 +42,7 @@ void PatientDangerTemp(object sender, EventArgs args)
 void PatientFileExist(object sender, EventArgs args)
 {
     //screen.ColorWrite(myEvent, $"UWAGA plik: {fileName} istnieje\n" +
-    screen.ColorWrite(myEvent2, $"UWAGA plik:  istnieje\n" +
+    screen.ColorWrite(myEvent2, $"UWAGA plik:  już istnieje\n" +
         "Pomiar został dodany do istniejącego pliku\n");
 }
 
@@ -44,7 +50,6 @@ var showMainMenu = true;
 
 while (showMainMenu)
 {
-    Console.Clear();
     screen.ClsAppHeader(myHdFrground, myHdBkground, appHeader);
     screen.NewLine();
     screen.ColorWrite(mySubHeader, $"Uruchom program, zapisując dane: \n");
@@ -52,7 +57,7 @@ while (showMainMenu)
     screen.ColorWrite(myOption, "2) W pliku na dysku komputera\n");
     screen.ColorWrite(myOption, "E) Wyjdź z programu\n");
     screen.NewLine();
-    screen.ColorWrite(mySubHeader, "\r\nWybierz opcję: ");
+    screen.ColorWrite(mySubHeader, chooseOption);
 
     var inputOption = Console.ReadLine().ToUpper();
 
@@ -86,7 +91,7 @@ static string MenuInMemory(Screen screen, PatientInMemory patient)
 
     while (showMenu)
     {
-        screen.ClsAppHeader(myHdFrground, myHdBkground, $"Program {progName} - dane zapisywane w pamięci\n");
+        screen.ClsAppHeader(myHdFrground, myHdBkground, $"{progName} - dane zapisywane w pamięci\n");
         screen.NewLine();
         screen.ColorWrite(myOption, "1) Podaj kolejne wartości temperatury ciała,\n");
         screen.ColorWrite(myOption, "2) Wyświetl wszystkie wprowadzone wartości temperatury\n");
@@ -94,14 +99,13 @@ static string MenuInMemory(Screen screen, PatientInMemory patient)
         screen.ColorWrite(myOption, "E) Wróć do poprzedniego menu\n");
         screen.NewLine();
         screen.ColorWrite(myInput, $"Pacjent {patient.Name} \n");
-
-        screen.ColorWrite(mySubHeader, "\r\nWybierz opcję: ");
+        screen.ColorWrite(mySubHeader, chooseOption);
 
         switch (Console.ReadLine().ToUpper())
         {
             case "1": // Podaj kolejne wartości temperatury ciała
                 screen.NewLine();
-                screen.ColorWrite(myOption, "Podawanie kolejnych wartości kończy ENTER\n\n");
+                screen.ColorWrite(myOption, "ENTER kończy wprowadzanie kolejnych pomiarów\n\n");
                 while (true)
                 {
                     screen.ColorWrite(myInput, "Podaj poprawnie zmierzoną temperaturę ciała: ");
@@ -123,7 +127,7 @@ static string MenuInMemory(Screen screen, PatientInMemory patient)
             case "2": // Wyświetl wszystkie wprowadzone wartości temperatury
                 screen.NewLine();
                 patient.PrintAllBodyTemps(screen);
-                screen.ColorWrite(myOption, "\n\nNaciśnij dowolny klawisz");
+                screen.ColorWrite(myOption, pressAnyKey);
                 Console.ReadKey();
                 break;
             case "3": // Wyświetl statystyki z wprowadzonych wartości
@@ -162,7 +166,7 @@ static string MenuInMemory(Screen screen, PatientInMemory patient)
                     screen.ColorWrite(myStats, "Zbyt mało pomiarów, aby określić tendencję\n");
                 }
 
-                screen.ColorWrite(myOption, "\n\nNaciśnij dowolny klawisz");
+                screen.ColorWrite(myOption, pressAnyKey);
                 Console.ReadKey();
                 break;
             case "E": // Wróć do poprzedniego menu
@@ -184,7 +188,7 @@ static string MenuInFile(Screen screen, PatientInFile patient)
 
     while (showMenu)
     {
-        screen.ClsAppHeader(myHdFrground, myHdBkground, $"Program {progName} - dane zapisywane na dysku\n");
+        screen.ClsAppHeader(myHdFrground, myHdBkground, $"{progName} - dane zapisywane na dysku\n");
         screen.NewLine();
         screen.ColorWrite(myOption, "1) Dopisz kolejne wartości temperatury ciała,\n");
         screen.ColorWrite(myOption, "2) Wyświetl wszystkie wartości temperatury z pliku\n");
@@ -192,8 +196,7 @@ static string MenuInFile(Screen screen, PatientInFile patient)
         screen.ColorWrite(myOption, "E) Wróć do poprzedniego menu\n");
         screen.NewLine();
         screen.ColorWrite(myInput, $"Pacjent {patient.Name}, nazwa pliku: {patient.fileName}");
-
-        screen.ColorWrite(mySubHeader, "\r\nWybierz opcję: ");
+        screen.ColorWrite(mySubHeader, chooseOption);
 
         switch (Console.ReadLine().ToUpper())
         {
@@ -221,7 +224,7 @@ static string MenuInFile(Screen screen, PatientInFile patient)
             case "2": // Wyświetl wszystkie wartości temperatury z pliku
                 screen.NewLine();
                 patient.PrintAllBodyTemps(screen);
-                screen.ColorWrite(myOption, "\n\nNaciśnij dowolny klawisz");
+                screen.ColorWrite(myOption, pressAnyKey);
                 Console.ReadKey();
                 break;
             case "3": // Wyświetl statystyki z wprowadzonych wartości
@@ -245,7 +248,7 @@ static string MenuInFile(Screen screen, PatientInFile patient)
                 {
                     screen.ColorWrite(myStats, "# Temperatura zarówno rosła jak i malała \n");
                 }
-                screen.ColorWrite(myOption, "\n\nNaciśnij dowolny klawisz");
+                screen.ColorWrite(myOption, pressAnyKey);
                 Console.ReadKey();
                 break;
             case "E": // Wróć do poprzedniego menu
@@ -257,12 +260,4 @@ static string MenuInFile(Screen screen, PatientInFile patient)
         }
     }
     return inputTemp;
-}
-
-static string PatientName(Screen screen)
-{
-    screen.NewLine();
-    screen.ColorWrite(myInput, "Podaj imię lub nazwisko pacjenta: ");
-    var name = Console.ReadLine();
-    return name;
 }
