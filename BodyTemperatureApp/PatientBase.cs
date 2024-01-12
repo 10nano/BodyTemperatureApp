@@ -7,6 +7,28 @@
         public readonly float Hipotherm = 35f;
         public readonly float Hipertherm = 40f;
 
+        public delegate void DangerTempDelegate(object sender, EventArgs args);
+        public event DangerTempDelegate DangerTemp;
+
+        public void SnapEventDangerTemp()
+        {
+            if (DangerTemp != null)
+            {
+                DangerTemp(this, new EventArgs());
+            }
+        }
+
+        public delegate void FileExistDelegate(object sender, EventArgs args);
+        public event FileExistDelegate FileExist;
+
+        public void SnapEventFileExist()
+        {
+            if (FileExist != null)
+            {
+                FileExist(this, new EventArgs());
+            }
+        }
+
         public PatientBase(string name)
         {
             Name = name;

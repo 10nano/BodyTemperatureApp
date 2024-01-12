@@ -11,6 +11,9 @@ namespace BodyTemperatureApp
         void AddBodyTemp(string bodyTemp);
         void PrintAllBodyTemps(Screen screen);
 
+        event DangerTempDelegate DangerTemp;
+        event FileExistDelegate FileExist;
+
         Statistics GetStatistics();
     }
 }

@@ -6,6 +6,7 @@ const ConsoleColor myInput = ConsoleColor.DarkGreen;
 const ConsoleColor myStats = ConsoleColor.Magenta;
 const ConsoleColor myExcept = ConsoleColor.Red;
 const ConsoleColor myEvent = ConsoleColor.DarkRed;
+const ConsoleColor myEvent2 = ConsoleColor.Yellow;
 const ConsoleColor myHdBkground = ConsoleColor.Yellow;
 const ConsoleColor myHdFrground = ConsoleColor.Black;
 
@@ -22,7 +23,22 @@ var screen = new Screen();
 PatientInMemory patientMemory;
 PatientInFile patientFile;
 
-string inputName = "";
+string patientName = "";
+string patientTemp = "";
+
+void PatientDangerTemp(object sender, EventArgs args)
+{
+    screen.ColorWrite(myEvent, "Proszę natychmiast zgłosić się do lekarza\n" +
+    $"Temperatura: .... jest niebezpieczna dla życia Pacjenta\n\n");
+    //$"Temperatura: {bodyTemp} jest niebezpieczna dla życia Pacjenta\n\n");
+}
+
+void PatientFileExist(object sender, EventArgs args)
+{
+    //screen.ColorWrite(myEvent, $"UWAGA plik: {fileName} istnieje\n" +
+    screen.ColorWrite(myEvent2, $"UWAGA plik:  istnieje\n" +
+        "Pomiar został dodany do istniejącego pliku\n");
+}
 
 var showMainMenu = true;
 
@@ -38,31 +54,35 @@ while (showMainMenu)
     screen.NewLine();
     screen.ColorWrite(mySubHeader, "\r\nWybierz opcję: ");
 
-    var inputKey = Console.ReadLine().ToUpper();
+    var inputOption = Console.ReadLine().ToUpper();
 
-    if (inputKey == "1" || inputKey == "2")
+    if (inputOption == "1" || inputOption == "2")
     {
-        inputName = PatientName(screen);
+        patientName = PatientName(screen);
     }
 
-    switch (inputKey)
+    switch (inputOption)
     {
         case "1": // Uruchom program w pamięci ulotnej komputera
-            patientMemory = new PatientInMemory(inputName);
-            MenuInMemory(screen, patientMemory);
+            patientMemory = new PatientInMemory(patientName);
+            patientMemory.DangerTemp += PatientDangerTemp;
+            patientTemp = MenuInMemory(screen, patientMemory);
             break;
         case "2": // Uruchom program w pliku na dysku komputera
-            patientFile = new PatientInFile(inputName);
-            MenuInFile(screen, patientFile);
+            patientFile = new PatientInFile(patientName);
+            patientFile.DangerTemp += PatientDangerTemp;
+            patientFile.FileExist += PatientFileExist;
+            patientTemp = MenuInFile(screen, patientFile);
             break;
         case "E": // Wyjdź z programu
             return;
     }
 }
 
-static void MenuInMemory(Screen screen, PatientInMemory patient)
+static string MenuInMemory(Screen screen, PatientInMemory patient)
 {
     bool showMenu = true;
+    string inputTemp = "";
 
     while (showMenu)
     {
@@ -80,20 +100,19 @@ static void MenuInMemory(Screen screen, PatientInMemory patient)
         switch (Console.ReadLine().ToUpper())
         {
             case "1": // Podaj kolejne wartości temperatury ciała
-                string inputString;
                 screen.NewLine();
                 screen.ColorWrite(myOption, "Podawanie kolejnych wartości kończy ENTER\n\n");
                 while (true)
                 {
                     screen.ColorWrite(myInput, "Podaj poprawnie zmierzoną temperaturę ciała: ");
-                    inputString = Console.ReadLine();
-                    if (inputString == "")
+                    inputTemp = Console.ReadLine();
+                    if (inputTemp == "")
                     {
                         break;
                     }
                     try
                     {
-                        patient.AddBodyTemp(inputString);
+                        patient.AddBodyTemp(inputTemp);
                     }
                     catch (Exception exc)
                     {
@@ -111,38 +130,38 @@ static void MenuInMemory(Screen screen, PatientInMemory patient)
                 var statistics = patient.GetStatistics();
                 if (statistics.Count == 0)
                 {
-                    screen.ColorWrite(myEvent,"Brak pomiarów temperatury");
+                    screen.ColorWrite(myEvent, "Brak pomiarów temperatury");
                     Console.ReadKey();
                     break;
                 }
 
-                    screen.NewLine();
-                    screen.ColorWrite(myStats, $"Temperatura minimalna: {statistics.Min}\n");
-                    screen.ColorWrite(myStats, $"Temperatura maksymalna: {statistics.Max}\n");
-                    if (statistics.Count > 1)
+                screen.NewLine();
+                screen.ColorWrite(myStats, $"Temperatura minimalna: {statistics.Min}\n");
+                screen.ColorWrite(myStats, $"Temperatura maksymalna: {statistics.Max}\n");
+                if (statistics.Count > 1)
+                {
+                    if (statistics.Rises && statistics.NotRises) // both true
                     {
-                        if (statistics.Rises && statistics.NotRises) // both true
-                        {
-                            screen.ColorWrite(myStats, " To się nie powinno zdarzyć \n");
-                        }
-                        else if (statistics.Rises) // ! NotRises
-                        {
-                            screen.ColorWrite(myStats, " Temperatura WZRASTA !!!\n");
-                        }
-                        else if (statistics.NotRises) // ! Rises
-                        {
-                            screen.ColorWrite(myStats, " Temperatura nie wzrasta \n");
-                        }
-                        else // ! Rises && ! NotRises
-                        {
-                            screen.ColorWrite(myStats, " Temperatura \"skacze\"\n");
-                        }
+                        screen.ColorWrite(myStats, " To się nie powinno zdarzyć \n");
                     }
-                    else
+                    else if (statistics.Rises) // ! NotRises
                     {
-                        screen.ColorWrite(myStats, "Zbyt mało pomiarów, aby określić tendencję\n");
+                        screen.ColorWrite(myStats, " Temperatura WZRASTA !!!\n");
                     }
-                
+                    else if (statistics.NotRises) // ! Rises
+                    {
+                        screen.ColorWrite(myStats, " Temperatura nie wzrasta \n");
+                    }
+                    else // ! Rises && ! NotRises
+                    {
+                        screen.ColorWrite(myStats, " Temperatura \"skacze\"\n");
+                    }
+                }
+                else
+                {
+                    screen.ColorWrite(myStats, "Zbyt mało pomiarów, aby określić tendencję\n");
+                }
+
                 screen.ColorWrite(myOption, "\n\nNaciśnij dowolny klawisz");
                 Console.ReadKey();
                 break;
@@ -155,11 +174,13 @@ static void MenuInMemory(Screen screen, PatientInMemory patient)
         }
 
     }
+    return inputTemp;
 }
 
-static void MenuInFile(Screen screen, PatientInFile patient)
+static string MenuInFile(Screen screen, PatientInFile patient)
 {
     bool showMenu = true;
+    string inputTemp = "";
 
     while (showMenu)
     {
@@ -177,19 +198,19 @@ static void MenuInFile(Screen screen, PatientInFile patient)
         switch (Console.ReadLine().ToUpper())
         {
             case "1": // Dopisz kolejne wartości temperatury ciała
-                string inputString;
+                //string inputTemp;
                 screen.NewLine();
                 while (true)
                 {
                     screen.ColorWrite(myInput, "Dopisz poprawnie zmierzoną temperaturę ciała: ");
-                    inputString = Console.ReadLine();
-                    if (inputString == "")
+                    inputTemp = Console.ReadLine();
+                    if (inputTemp == "")
                     {
                         break;
                     }
                     try
                     {
-                        patient.AddBodyTemp(inputString);
+                        patient.AddBodyTemp(inputTemp);
                     }
                     catch (Exception exc)
                     {
@@ -235,6 +256,7 @@ static void MenuInFile(Screen screen, PatientInFile patient)
                 break;
         }
     }
+    return inputTemp;
 }
 
 static string PatientName(Screen screen)

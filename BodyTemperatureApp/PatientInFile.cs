@@ -16,15 +16,12 @@
             {
                 if (bodyTemp <= Hipotherm || bodyTemp >= Hipertherm)
                 {
-                    Console.Write("\n\nProszę natychmiast zgłosić się do lekarza\n" +
-                    $"Temperatura: {bodyTemp} jest niebezpieczna dla życia Pacjenta\n\n");
+                    SnapEventDangerTemp();
                 }
 
                 if (File.Exists($"{fileName}"))
                 {
-                    throw new Exception($"UWAGA plik: {fileName} istnieje\n" +
-                        "Pomiary zostaną dodane do istniejącego pliku");
-                    ; // Dopisywanie do istniejącego pliku
+                    SnapEventFileExist();
                 }
 
                 using (var writer = File.AppendText(fileName))

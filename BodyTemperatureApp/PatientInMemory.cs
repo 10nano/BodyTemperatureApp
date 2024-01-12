@@ -14,8 +14,7 @@
             {
                 if (bodyTemp <= Hipotherm || bodyTemp >= Hipertherm)
                 {
-                    Console.Write("\n\nProszę natychmiast zgłosić się do lekarza\n" +
-                    $"Temperatura: {bodyTemp} jest niebezpieczna dla życia Pacjenta\n\n");
+                    SnapEventDangerTemp();
                 }
 
                 bodyTempMeasures.Add(bodyTemp);
