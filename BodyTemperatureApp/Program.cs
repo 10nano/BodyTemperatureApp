@@ -14,7 +14,7 @@ const string progName = "\"Statystyki z pomiarów temperatury ciała\"";
 const string appHeader = $"Witamy w programie {progName}\n";
 
 const string pressAnyKey = "\n\nNaciśnij dowolny klawisz";
-const string chooseOption = "\r\nWybierz opcję: ";
+const string chooseOption = "Wybierz opcję: ";
 
 static string PatientName(Screen screen)
 {
@@ -36,17 +36,17 @@ PatientInFile patientFile;
 string patientName = "";
 string patientTemp = "";
 
-void PatientDangerTemp(object sender, EventArgs args)
+void PatientDangerTemp(object sender, EventArgs args, string bodyTemp)
 {
     screen.ColorWrite(myEvent, "Proszę natychmiast zgłosić się do lekarza\n" +
-    $"Temperatura: .... jest niebezpieczna dla życia Pacjenta\n\n");
+    $"Podana temperatura jest niebezpieczna dla życia Pacjenta\n\n");
     //$"Temperatura: {bodyTemp} jest niebezpieczna dla życia Pacjenta\n\n");
 }
 
 void PatientFileExist(object sender, EventArgs args)
 {
     //screen.ColorWrite(myEvent, $"UWAGA plik: {fileName} istnieje\n" +
-    screen.ColorWrite(myEvent2, $"UWAGA plik:  już istnieje\n" +
+    screen.ColorWrite(myEvent2, $"UWAGA plik już istnieje\n" +
         "Pomiar został dodany do istniejącego pliku\n");
 }
 
@@ -69,7 +69,7 @@ while (showMainMenu)
     {
         patientName = PatientName(screen);
     }
-
+ 
     switch (inputOption)
     {
         case "1": // Uruchom program w pamięci ulotnej komputera
