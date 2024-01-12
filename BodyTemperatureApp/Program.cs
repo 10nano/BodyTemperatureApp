@@ -14,7 +14,7 @@ const string progName = "\"Statystyki z pomiarów temperatury ciała\"";
 const string appHeader = $"Witamy w programie {progName}\n";
 
 const string pressAnyKey = "\n\nNaciśnij dowolny klawisz";
-const string chooseOption = "\n\nNaciśnij dowolny klawisz";
+const string chooseOption = "\r\nWybierz opcję: ";
 
 static string PatientName(Screen screen)
 {
