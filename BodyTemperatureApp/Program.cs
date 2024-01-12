@@ -21,6 +21,10 @@ static string PatientName(Screen screen)
     screen.NewLine();
     screen.ColorWrite(myInput, "Podaj imię lub nazwisko pacjenta: ");
     var name = Console.ReadLine();
+    if(name == "")
+    {
+        name = "NN";
+    }
     return name;
 }
 
