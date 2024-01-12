@@ -39,15 +39,13 @@ string patientTemp = "";
 void PatientDangerTemp(object sender, EventArgs args)
 {
     screen.ColorWrite(myEvent, "Proszę natychmiast zgłosić się do lekarza\n" +
-    $"Temperatura: .... jest niebezpieczna dla życia Pacjenta\n\n");
-    //$"Temperatura: {bodyTemp} jest niebezpieczna dla życia Pacjenta\n\n");
+    $"Padana temperatura jest niebezpieczna dla życia Pacjenta\n\n");
 }
 
 void PatientFileExist(object sender, EventArgs args)
 {
-    //screen.ColorWrite(myEvent, $"UWAGA plik: {fileName} istnieje\n" +
-    screen.ColorWrite(myEvent2, $"UWAGA plik:  już istnieje\n" +
-        "Pomiar został dodany do istniejącego pliku\n");
+    screen.ColorWrite(myEvent2, $"UWAGA: powyższy plik już istnieje\n" +
+        "Pomiar został dodany do istniejącego pliku\n\n");
 }
 
 var showMainMenu = true;
