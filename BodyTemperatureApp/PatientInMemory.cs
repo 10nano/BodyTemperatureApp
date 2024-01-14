@@ -29,7 +29,7 @@
         {
             foreach (var bodyTemp in bodyTempMeasures)
             {
-                screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp} ");
+                screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp:N1} ");
             }
         }
 

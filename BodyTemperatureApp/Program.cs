@@ -142,8 +142,8 @@ static string MenuInMemory(Screen screen, PatientInMemory patient)
                 }
 
                 screen.NewLine();
-                screen.ColorWrite(myStats, $"Temperatura minimalna: {statistics.Min}\n");
-                screen.ColorWrite(myStats, $"Temperatura maksymalna: {statistics.Max}\n");
+                screen.ColorWrite(myStats, $"Temperatura minimalna: {statistics.Min:N1}\n");
+                screen.ColorWrite(myStats, $"Temperatura maksymalna: {statistics.Max:N1}\n");
                 if (statistics.Count > 1)
                 {
                     if (statistics.Rises && statistics.NotRises) // both true

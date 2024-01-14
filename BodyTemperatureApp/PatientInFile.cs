@@ -40,7 +40,7 @@
             var bodyTempsFromFile = ReadTempsFromFile();
             foreach (var bodyTemp in bodyTempsFromFile)
             {
-                screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp} ");
+                screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp:N1} ");
             }
 
         }
