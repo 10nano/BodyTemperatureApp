@@ -35,12 +35,12 @@
             }
         }
 
-        public override void PrintAllBodyTemps(Screen screen)
+        public override void PrintAllBodyTemps()
         {
             var bodyTempsFromFile = ReadTempsFromFile();
             foreach (var bodyTemp in bodyTempsFromFile)
             {
-                screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp:N1} ");
+                Screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp:N1} ");
             }
 
         }

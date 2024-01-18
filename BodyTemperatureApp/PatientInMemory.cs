@@ -25,11 +25,11 @@
             }
         }
 
-        public override void PrintAllBodyTemps(Screen screen)
+        public override void PrintAllBodyTemps()
         {
             foreach (var bodyTemp in bodyTempMeasures)
             {
-                screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp:N1} ");
+                Screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp:N1} ");
             }
         }
 

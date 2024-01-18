@@ -1,28 +1,28 @@
 ﻿namespace BodyTemperatureApp
 {
-    public class Screen : IScreen
+    public class Screen
     {
 
-        public void ColorWrite(ConsoleColor fgColor, ConsoleColor bgColor, string text)
+        public static void ColorWrite(ConsoleColor fgColor, ConsoleColor bgColor, string text)
         {
             Console.ForegroundColor = fgColor;
             Console.BackgroundColor = bgColor;
             Console.Write(text);
             Console.ResetColor();
         }
-        public void ColorWrite(ConsoleColor fgColor, string text)
+        public static void ColorWrite(ConsoleColor fgColor, string text)
         {
             Console.ForegroundColor = fgColor;
             Console.Write(text);
             Console.ResetColor();
 
         }
-        public void NewLine()
+        public static void NewLine()
         {
             Console.WriteLine();
         }
 
-        public void ClsAppHeader(ConsoleColor fgColor, ConsoleColor bgColor, string text)
+        public static void ClsAppHeader(ConsoleColor fgColor, ConsoleColor bgColor, string text)
         {
             Console.Clear();
             Console.WriteLine();

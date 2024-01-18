@@ -55,7 +55,7 @@
             }
         }
 
-        public abstract void PrintAllBodyTemps(Screen screen);
+        public abstract void PrintAllBodyTemps();
 
         public abstract Statistics GetStatistics();
     }

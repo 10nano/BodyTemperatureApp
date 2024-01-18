@@ -9,7 +9,7 @@ namespace BodyTemperatureApp
         void AddBodyTemp(float bodyTemp);
         void AddBodyTemp(int bodyTemp);
         void AddBodyTemp(string bodyTemp);
-        void PrintAllBodyTemps(Screen screen);
+        void PrintAllBodyTemps();
 
         event DangerTempDelegate DangerTemp;
         event FileExistDelegate FileExist;
