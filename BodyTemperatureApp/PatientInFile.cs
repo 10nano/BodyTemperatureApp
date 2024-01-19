@@ -2,7 +2,7 @@
 {
     public class PatientInFile : PatientBase
     {
-        protected internal string fileName;
+        protected string fileName;
 
         public PatientInFile(string name)
             : base(name)
@@ -18,7 +18,6 @@
                 {
                     SnapEventDangerTemp(bodyTemp);
                 }
-
                 if (File.Exists($"{fileName}"))
                 {
                     SnapEventFileExist(fileName);

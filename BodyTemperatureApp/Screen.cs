@@ -1,7 +1,16 @@
 ﻿namespace BodyTemperatureApp
 {
-    public class Screen
+    public static class Screen
     {
+        public static ConsoleColor mySubHeader = ConsoleColor.DarkBlue;
+        public static ConsoleColor myOption = ConsoleColor.DarkYellow;
+        public static ConsoleColor myInput = ConsoleColor.DarkGreen;
+        public static ConsoleColor myStats = ConsoleColor.Magenta;
+        public static ConsoleColor myExcept = ConsoleColor.Red;
+        public static ConsoleColor myEvent = ConsoleColor.DarkRed;
+        public static ConsoleColor myEvent2 = ConsoleColor.Yellow;
+        public static ConsoleColor myHdBkground = ConsoleColor.Yellow;
+        public static ConsoleColor myHdFrground = ConsoleColor.Black;
 
         public static void ColorWrite(ConsoleColor fgColor, ConsoleColor bgColor, string text)
         {

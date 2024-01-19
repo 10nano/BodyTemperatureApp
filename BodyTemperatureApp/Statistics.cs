@@ -36,7 +36,7 @@
                 {
                     NotRises = false; // nie rośnie
                 }
-                else
+                else if (PrevTemp != currTemp)
                 {
                     Rises = false; // rośnie
                 }
