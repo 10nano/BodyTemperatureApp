@@ -16,12 +16,12 @@
             {
                 if (bodyTemp <= Hipotherm || bodyTemp >= Hipertherm)
                 {
-                    SnapEventDangerTemp();
+                    SnapEventDangerTemp(bodyTemp);
                 }
 
                 if (File.Exists($"{fileName}"))
                 {
-                    SnapEventFileExist();
+                    SnapEventFileExist(fileName);
                 }
 
                 using (var writer = File.AppendText(fileName))

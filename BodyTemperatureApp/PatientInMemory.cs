@@ -14,14 +14,14 @@
             {
                 if (bodyTemp <= Hipotherm || bodyTemp >= Hipertherm)
                 {
-                    SnapEventDangerTemp();
+                    SnapEventDangerTemp(bodyTemp);
                 }
 
                 bodyTempMeasures.Add(bodyTemp);
             }
             else
             {
-                throw new Exception($"Podana wartość temperatury \"{bodyTemp}\" jest poza zakresem termometru.");
+                throw new Exception($"Podana wartość temperatury \"{bodyTemp:N1}\" jest poza zakresem termometru.");
             }
         }
 

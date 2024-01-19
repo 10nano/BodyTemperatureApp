@@ -34,15 +34,15 @@ PatientInFile patientFile;
 string patientName = "";
 string patientTemp = "";
 
-void PatientDangerTemp(object sender, EventArgs args)
+void PatientDangerTemp(float temp, object sender, EventArgs args)
 {
     Screen.ColorWrite(myEvent, "Proszę natychmiast zgłosić się do lekarza\n" +
-    $"Padana temperatura jest niebezpieczna dla życia Pacjenta\n\n");
+    $"Temperatura {temp:N1} jest niebezpieczna dla życia Pacjenta\n\n");
 }
 
-void PatientFileExist(object sender, EventArgs args)
+void PatientFileExist(string fileName, object sender, EventArgs args)
 {
-    Screen.ColorWrite(myEvent2, $"UWAGA: powyższy plik już istnieje\n" +
+    Screen.ColorWrite(myEvent2, $"UWAGA: plik {fileName} już istnieje\n" +
         "Pomiar został dodany do istniejącego pliku\n\n");
 }
 
