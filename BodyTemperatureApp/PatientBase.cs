@@ -34,7 +34,15 @@
             Name = name;
         }
 
-        public string Name { get; private set; }
+        public PatientBase(string name, string fileName)
+        {
+            Name = name;
+            FileName = fileName;
+        }
+
+        public string Name { get; private set; } = string.Empty;
+
+        public string FileName { get; private set; } = string.Empty;
 
         public abstract void AddBodyTemp(float bodyTemp);
 

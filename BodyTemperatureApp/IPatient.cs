@@ -5,6 +5,7 @@ namespace BodyTemperatureApp
     public interface IPatient
     {
         string Name { get; }
+        string FileName { get; }
 
         void AddBodyTemp(float bodyTemp);
         void AddBodyTemp(int bodyTemp);
