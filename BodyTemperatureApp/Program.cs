@@ -16,35 +16,11 @@ const string appHeader = $"Witamy w programie {progName}\n";
 const string pressAnyKey = "\n\nNaciśnij dowolny klawisz";
 const string chooseOption = "Wybierz opcję: ";
 
-static string PatientName()
-{
-    Screen.NewLine();
-    Screen.ColorWrite(myInput, "Podaj imię lub nazwisko pacjenta: ");
-    var name = Console.ReadLine();
-    if (name == "")
-    {
-        name = "NN";
-    }
-    return name;
-}
-
 PatientInMemory patientMemory;
 PatientInFile patientFile;
 
 string patientName = "";
 string patientTemp = "";
-
-void PatientDangerTemp(float temp, object sender, EventArgs args)
-{
-    Screen.ColorWrite(myEvent, "Proszę natychmiast zgłosić się do lekarza\n" +
-    $"Temperatura {temp:N1} jest niebezpieczna dla życia Pacjenta\n\n");
-}
-
-void PatientFileExist(string fileName, object sender, EventArgs args)
-{
-    Screen.ColorWrite(myEvent2, $"UWAGA: plik {fileName} już istnieje\n" +
-        "Pomiar został dodany do istniejącego pliku\n\n");
-}
 
 var showMainMenu = true;
 
@@ -66,32 +42,32 @@ while (showMainMenu)
         patientName = PatientName();
     }
 
-    bool inMemory;
+    bool isInMemory;
     switch (inputOption)
     {
         case "1": // Uruchom program w pamięci ulotnej komputera
             patientMemory = new PatientInMemory(patientName);
             patientMemory.DangerTemp += PatientDangerTemp;
-            inMemory = true;
-            patientTemp = SubMenu(patientMemory, inMemory);
+            isInMemory = true;
+            patientTemp = SubMenu(patientMemory, isInMemory);
             break;
         case "2": // Uruchom program w pliku na dysku komputera
             patientFile = new PatientInFile(patientName);
             patientFile.DangerTemp += PatientDangerTemp;
             patientFile.FileExist += PatientFileExist;
-            inMemory = false;
-            patientTemp = SubMenu(patientFile, inMemory);
+            isInMemory = false;
+            patientTemp = SubMenu(patientFile, isInMemory);
             break;
         case "E": // Wyjdź z programu
             return;
     }
 }
 
-static string SubMenu(IPatient patient, bool inMemory)
+static string SubMenu(IPatient patient, bool isInMemory)
 {
     string where, option1, option2, option3, option4, patientStr;
 
-    if (inMemory)
+    if (isInMemory)
     {
         where = "w pamięci";
         option1 = "1) Podaj kolejne wartości temperatury ciała,\n";
@@ -100,7 +76,7 @@ static string SubMenu(IPatient patient, bool inMemory)
         option4 = "E) Wróć do poprzedniego menu\n";
         patientStr = $"Pacjent {patient.Name} \n";
     }
-    else // inFile
+    else // isInFile
     {
         where = "na dysku";
         option1 = "1) Dopisz kolejne wartości temperatury ciała,\n";
@@ -186,4 +162,28 @@ static string SubMenu(IPatient patient, bool inMemory)
         }
     }
     return inputTemp;
+}
+
+static string PatientName()
+{
+    Screen.NewLine();
+    Screen.ColorWrite(myInput, "Podaj imię lub nazwisko pacjenta: ");
+    var name = Console.ReadLine();
+    if (name == "")
+    {
+        name = "NN";
+    }
+    return name;
+}
+
+void PatientDangerTemp(float temp, object sender, EventArgs args)
+{
+    Screen.ColorWrite(myEvent, "Proszę natychmiast zgłosić się do lekarza\n" +
+    $"Temperatura {temp:N1} jest niebezpieczna dla życia Pacjenta\n\n");
+}
+
+void PatientFileExist(string fileName, object sender, EventArgs args)
+{
+    Screen.ColorWrite(myEvent2, $"UWAGA: plik {fileName} już istnieje\n" +
+        "Pomiar został dodany do istniejącego pliku\n\n");
 }

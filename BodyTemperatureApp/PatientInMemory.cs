@@ -21,7 +21,7 @@
             }
             else
             {
-                throw new Exception($"Podana wartość temperatury \"{bodyTemp:N1}\" jest poza zakresem termometru.");
+                ExceptionOutOfScale(bodyTemp);
             }
         }
 

@@ -31,7 +31,7 @@
             }
             else
             {
-                throw new Exception($"Podana wartość temperatury: \"{bodyTemp}\" jest poza zakresem termometru");
+                ExceptionOutOfScale(bodyTemp);
             }
         }
 
@@ -77,7 +77,6 @@
             {
                 statistics.AddBodyTemp(bodyTemp);
             }
-
             return statistics;
         }
     }

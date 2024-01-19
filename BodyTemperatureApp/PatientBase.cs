@@ -40,6 +40,11 @@
             FileName = fileName;
         }
 
+        public static void ExceptionOutOfScale(float temp)
+        {
+            throw new Exception($"Podana wartość temperatury \"{temp:N1}\" jest poza zakresem termometru.");
+        }
+
         public string Name { get; private set; } = string.Empty;
 
         public string FileName { get; private set; } = string.Empty;
