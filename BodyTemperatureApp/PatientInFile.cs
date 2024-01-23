@@ -2,13 +2,26 @@
 {
     public class PatientInFile : PatientBase
     {
-        protected string fileName;
+
+        public string FileName { get; private set; }
 
         public PatientInFile(string name)
             : base(name)
         {
-            fileName = $"{name}_BodyTemp.txt";
+            FileName = $"{name}_BodyTemp.txt";
         }
+
+        public delegate void FileExistDelegate(string fileName, object sender, EventArgs args);
+        public event FileExistDelegate FileExist;
+
+        public void SnapEventFileExist(string fileName)
+        {
+            if (FileExist != null)
+            {
+                FileExist(fileName, this, new EventArgs());
+            }
+        }
+
 
         public override void AddBodyTemp(float bodyTemp)
         {
@@ -18,12 +31,12 @@
                 {
                     SnapEventDangerTemp(bodyTemp);
                 }
-                if (File.Exists($"{fileName}"))
+                if (File.Exists($"{FileName}"))
                 {
-                    SnapEventFileExist(fileName);
+                    SnapEventFileExist(FileName);
                 }
 
-                using (var writer = File.AppendText(fileName))
+                using (var writer = File.AppendText(FileName))
                 {
                     writer.WriteLine(bodyTemp);
                 }
@@ -53,9 +66,9 @@
         private List<float> ReadTempsFromFile()
         {
             var bodyTemps = new List<float>();
-            if (File.Exists($"{fileName}"))
+            if (File.Exists($"{FileName}"))
             {
-                using (var reader = File.OpenText($"{fileName}"))
+                using (var reader = File.OpenText($"{FileName}"))
                 {
                     var line = reader.ReadLine();
                     while (line != null)

@@ -10,6 +10,7 @@
         public delegate void DangerTempDelegate(float temp, object sender, EventArgs args);
         public event DangerTempDelegate DangerTemp;
 
+
         public void SnapEventDangerTemp(float temp)
         {
             if (DangerTemp != null)
@@ -18,26 +19,9 @@
             }
         }
 
-        public delegate void FileExistDelegate(string fileName, object sender, EventArgs args);
-        public event FileExistDelegate FileExist;
-
-        public void SnapEventFileExist(string fileName)
-        {
-            if (FileExist != null)
-            {
-                FileExist(fileName, this, new EventArgs());
-            }
-        }
-
         public PatientBase(string name)
         {
             Name = name;
-        }
-
-        public PatientBase(string name, string fileName)
-        {
-            Name = name;
-            FileName = fileName;
         }
 
         public static void ExceptionOutOfScale(float temp)
@@ -47,7 +31,6 @@
 
         public string Name { get; private set; } = string.Empty;
 
-        public string FileName { get; private set; } = string.Empty;
 
         public abstract void AddBodyTemp(float bodyTemp);
 

@@ -1,4 +1,5 @@
 ﻿using static BodyTemperatureApp.PatientBase;
+using static BodyTemperatureApp.PatientInFile;
 
 namespace BodyTemperatureApp
 {

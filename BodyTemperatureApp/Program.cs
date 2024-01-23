@@ -57,25 +57,12 @@ static string SubMenu(IPatient patient, bool isInMemory)
 {
     string where, option1, option2, option3, option4, patientStr;
 
-    if (isInMemory)
-    {
-        where = "w pamięci";
-        option1 = "1) Podaj kolejne wartości temperatury ciała,\n";
-        option2 = "2) Wyświetl wszystkie wprowadzone wartości temperatury\n";
-        option3 = "3) Wyświetl statystyki z wprowadzonych wartości\n";
-        option4 = "E) Wróć do poprzedniego menu\n";
-        patientStr = $"Pacjent {patient.Name} \n";
-    }
-    else // isInFile
-    {
-        where = "na dysku";
-        option1 = "1) Dopisz kolejne wartości temperatury ciała,\n";
-        option2 = "2) Wyświetl wszystkie wartości temperatury z pliku\n";
-        option3 = "3) Wyświetl statystyki z wprowadzonych wartości\n";
-        option4 = "E) Wróć do poprzedniego menu\n";
-        patientStr = $"Pacjent {patient.Name}, nazwa pliku: {patient.FileName}";
-    }
-
+    where = isInMemory ? "w pamięci" : "na dysku";
+    option1 = "1) Podaj kolejne wartości temperatury ciała,\n";
+    option2 = isInMemory ? "2) Wyświetl wszystkie wprowadzone wartości temperatury\n" : "2) Wyświetl wszystkie wartości temperatury z pliku\n";
+    option3 = "3) Wyświetl statystyki z wprowadzonych wartości\n";
+    option4 = "E) Wróć do poprzedniego menu\n";
+    patientStr = isInMemory ? $"Pacjent {patient.Name} \n" : $"Pacjent {patient.Name}, nazwa pliku: {patient.FileName}\n";
 
     bool showMenu = true;
     string inputTemp = "";
@@ -126,14 +113,14 @@ static string SubMenu(IPatient patient, bool isInMemory)
                 Screen.ColorWrite(Screen.myStats, $"Maksymalna: {statistics.Max}\n");
 
                 var test = (statistics.Rises, statistics.NotRises);
-                var result = test switch
+                var tempResult = test switch
                 {
                     (true, true) => "# Temeratura stała\n",
                     (true, false) => "# Temperatura ROŚNIE !!!\n",
                     (false, true) => "# Temperatura Nie rośnie\n",
                     (false, false) => "# Temperatura zmienna\n",
                 };
-                Screen.ColorWrite(Screen.myStats, result);
+                Screen.ColorWrite(Screen.myStats, tempResult);
                 Screen.ColorWrite(Screen.myOption, pressAnyKey);
                 Console.ReadKey();
                 break;
