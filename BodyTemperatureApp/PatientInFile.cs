@@ -2,7 +2,6 @@
 {
     public class PatientInFile : PatientBase
     {
-
         public string FileName { get; private set; }
 
         public PatientInFile(string name)
@@ -10,18 +9,6 @@
         {
             FileName = $"{name}_BodyTemp.txt";
         }
-
-        public delegate void FileExistDelegate(string fileName, object sender, EventArgs args);
-        public event FileExistDelegate FileExist;
-
-        public void SnapEventFileExist(string fileName)
-        {
-            if (FileExist != null)
-            {
-                FileExist(fileName, this, new EventArgs());
-            }
-        }
-
 
         public override void AddBodyTemp(float bodyTemp)
         {
@@ -47,22 +34,38 @@
             }
         }
 
+        public override bool HasNoData()
+        {
+            return File.Exists($"{FileName}") ? false : true;
+        }
+
         public override void PrintAllBodyTemps()
         {
+            if (HasNoData())
+            {
+                SnapEventNoData();
+                return;
+            }
             var bodyTempsFromFile = ReadTempsFromFile();
             foreach (var bodyTemp in bodyTempsFromFile)
             {
                 Screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp:N1} ");
             }
-
         }
 
         public override Statistics GetStatistics()
         {
+            if (HasNoData())
+            {
+                SnapEventNoData();
+                return null;
+            }
+
             var bodyTempsFromFile = ReadTempsFromFile();
             var result = CountStatistics(bodyTempsFromFile);
             return result;
         }
+
         private List<float> ReadTempsFromFile()
         {
             var bodyTemps = new List<float>();
@@ -81,6 +84,7 @@
             }
             return bodyTemps;
         }
+
         private Statistics CountStatistics(List<float> bodyTemps)
         {
             Statistics statistics = new Statistics();
@@ -91,6 +95,17 @@
             }
             return statistics;
         }
+
+        public delegate void FileExistDelegate(string fileName, object sender, EventArgs args);
+        public event FileExistDelegate? FileExist;
+        public void SnapEventFileExist(string fileName)
+        {
+            if (FileExist != null)
+            {
+                FileExist(fileName, this, new EventArgs());
+            }
+        }
+
     }
 }
 

@@ -1,21 +1,20 @@
 ﻿using static BodyTemperatureApp.PatientBase;
-using static BodyTemperatureApp.PatientInFile;
 
 namespace BodyTemperatureApp
 {
     public interface IPatient
     {
         string Name { get; }
-        string FileName { get; }
 
         void AddBodyTemp(float bodyTemp);
         void AddBodyTemp(int bodyTemp);
         void AddBodyTemp(string bodyTemp);
+        bool HasNoData();
         void PrintAllBodyTemps();
-
-        event DangerTempDelegate DangerTemp;
-        event FileExistDelegate FileExist;
-
         Statistics GetStatistics();
+
+        event DangerTempDelegate? DangerTemp;
+        event NoDataDelegate? NoData;
+
     }
 }

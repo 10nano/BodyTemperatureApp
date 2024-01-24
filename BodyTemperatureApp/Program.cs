@@ -2,15 +2,14 @@
 
 const string progName = "\"Statystyki z pomiarów temperatury ciała\"";
 const string appHeader = $"Witamy w programie {progName}\n";
-
 const string pressAnyKey = "\n\nNaciśnij dowolny klawisz";
 const string chooseOption = "Wybierz opcję: ";
 
-PatientInMemory patientMemory;
-PatientInFile patientFile;
-
 string patientName = "";
 string patientTemp = "";
+
+PatientInMemory patientMemory;
+PatientInFile patientFile;
 
 var showMainMenu = true;
 
@@ -53,19 +52,34 @@ while (showMainMenu)
     }
 }
 
+static string PatientName()
+{
+    Screen.NewLine();
+    Screen.ColorWrite(Screen.myInput, "Podaj imię lub nazwisko pacjenta: ");
+    var name = Console.ReadLine();
+    if (name == "")
+    {
+        name = "NN";
+    }
+    return name;
+}
+
 static string SubMenu(IPatient patient, bool isInMemory)
 {
     string where, option1, option2, option3, option4, patientStr;
 
     where = isInMemory ? "w pamięci" : "na dysku";
     option1 = "1) Podaj kolejne wartości temperatury ciała,\n";
-    option2 = isInMemory ? "2) Wyświetl wszystkie wprowadzone wartości temperatury\n" : "2) Wyświetl wszystkie wartości temperatury z pliku\n";
+    option2 = isInMemory ?
+        "2) Wyświetl wszystkie wprowadzone wartości temperatury\n" :
+        "2) Wyświetl wszystkie wartości temperatury z pliku\n";
     option3 = "3) Wyświetl statystyki z wprowadzonych wartości\n";
     option4 = "E) Wróć do poprzedniego menu\n";
-    patientStr = isInMemory ? $"Pacjent {patient.Name} \n" : $"Pacjent {patient.Name}, nazwa pliku: {patient.FileName}\n";
+    patientStr = $"Pacjent {patient.Name} \n";
+
+    string inputTemp = "";
 
     bool showMenu = true;
-    string inputTemp = "";
 
     while (showMenu)
     {
@@ -78,6 +92,9 @@ static string SubMenu(IPatient patient, bool isInMemory)
         Screen.NewLine();
         Screen.ColorWrite(Screen.myInput, patientStr);
         Screen.ColorWrite(Screen.mySubHeader, chooseOption);
+
+        patient.NoData += PatientNoData;
+
         switch (Console.ReadLine().ToUpper())
         {
             case "1": // Dopisz kolejne wartości temperatury ciała
@@ -100,27 +117,29 @@ static string SubMenu(IPatient patient, bool isInMemory)
                     }
                 }
                 break;
-            case "2": // Wyświetl wszystkie wartości temperatury z pliku
-                Screen.NewLine();
+            case "2": // Wyświetl wszystkie wartości temperatury
                 patient.PrintAllBodyTemps();
                 Screen.ColorWrite(Screen.myOption, pressAnyKey);
                 Console.ReadKey();
                 break;
-            case "3": // Wyświetl statystyki z wprowadzonych wartości
+            case "3": // Pobierz i wyświetl statystyki z wprowadzonych wartości
                 var statistics = patient.GetStatistics();
-                Screen.NewLine();
-                Screen.ColorWrite(Screen.myStats, $"Minimalna: {statistics.Min} \n");
-                Screen.ColorWrite(Screen.myStats, $"Maksymalna: {statistics.Max}\n");
-
-                var test = (statistics.Rises, statistics.NotRises);
-                var tempResult = test switch
+                if (!patient.HasNoData())
                 {
-                    (true, true) => "# Temeratura stała\n",
-                    (true, false) => "# Temperatura ROŚNIE !!!\n",
-                    (false, true) => "# Temperatura Nie rośnie\n",
-                    (false, false) => "# Temperatura zmienna\n",
-                };
-                Screen.ColorWrite(Screen.myStats, tempResult);
+                    Screen.NewLine();
+                    Screen.ColorWrite(Screen.myStats, $"Minimalna: {statistics.Min} \n");
+                    Screen.ColorWrite(Screen.myStats, $"Maksymalna: {statistics.Max}\n");
+
+                    var test = (statistics.Rises, statistics.NotRises);
+                    var tempResult = test switch
+                    {
+                        (true, true) => "# Temeratura stała\n",
+                        (true, false) => "# Temperatura ROŚNIE !!!\n",
+                        (false, true) => "# Temperatura Nie rośnie\n",
+                        (false, false) => "# Temperatura zmienna\n",
+                    };
+                    Screen.ColorWrite(Screen.myStats, tempResult);
+                }
                 Screen.ColorWrite(Screen.myOption, pressAnyKey);
                 Console.ReadKey();
                 break;
@@ -135,25 +154,19 @@ static string SubMenu(IPatient patient, bool isInMemory)
     return inputTemp;
 }
 
-static string PatientName()
-{
-    Screen.NewLine();
-    Screen.ColorWrite(Screen.myInput, "Podaj imię lub nazwisko pacjenta: ");
-    var name = Console.ReadLine();
-    if (name == "")
-    {
-        name = "NN";
-    }
-    return name;
-}
-
-void PatientDangerTemp(float temp, object sender, EventArgs args)
+static void PatientDangerTemp(float temp, object sender, EventArgs args)
 {
     Screen.ColorWrite(Screen.myEvent, "Proszę natychmiast zgłosić się do lekarza\n" +
     $"Temperatura {temp:N1} jest niebezpieczna dla życia Pacjenta\n\n");
 }
 
-void PatientFileExist(string fileName, object sender, EventArgs args)
+static void PatientFileExist(string fileName, object sender, EventArgs args)
 {
     Screen.ColorWrite(Screen.myEvent2, $"Pomiar dodano do istniejącego pliku: {fileName}\n");
+}
+
+static void PatientNoData(object sender, EventArgs args)
+{
+    Console.Clear();
+    Screen.ColorWrite(Screen.myEvent2, $"\n\tBRAK DANYCH: Podaj kolejne wartości temperatur\n");
 }

@@ -8,6 +8,7 @@
             : base(name)
         {
         }
+
         public override void AddBodyTemp(float bodyTemp)
         {
             if (bodyTemp >= MinScaleTemp && bodyTemp <= MaxScaleTemp)
@@ -25,8 +26,18 @@
             }
         }
 
+        public override bool HasNoData()
+        {
+            return bodyTempMeasures.Count > 0 ? false : true;
+        }
+
         public override void PrintAllBodyTemps()
         {
+            if (HasNoData())
+            {
+                SnapEventNoData();
+                return;
+            }
             foreach (var bodyTemp in bodyTempMeasures)
             {
                 Screen.ColorWrite(ConsoleColor.Magenta, $"{bodyTemp:N1} ");
@@ -35,8 +46,12 @@
 
         public override Statistics GetStatistics()
         {
-            Statistics statistics = new Statistics();
+            if (HasNoData())
+            {
+                SnapEventNoData();
+            }
 
+            Statistics statistics = new Statistics();
             foreach (var bodyTemp in bodyTempMeasures)
             {
                 statistics.AddBodyTemp(bodyTemp);

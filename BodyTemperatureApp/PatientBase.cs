@@ -2,35 +2,17 @@
 {
     public abstract class PatientBase : IPatient
     {
-        public readonly float MinScaleTemp = 35f;
-        public readonly float MaxScaleTemp = 42.5f;
-        public readonly float Hipotherm = 35f;
-        public readonly float Hipertherm = 40f;
+        public const float MinScaleTemp = 35f;
+        public const float MaxScaleTemp = 42.5f;
+        public const float Hipotherm = 35f;
+        public const float Hipertherm = 40f;
 
-        public delegate void DangerTempDelegate(float temp, object sender, EventArgs args);
-        public event DangerTempDelegate DangerTemp;
-
-
-        public void SnapEventDangerTemp(float temp)
-        {
-            if (DangerTemp != null)
-            {
-                DangerTemp(temp, this, new EventArgs());
-            }
-        }
+        public string Name { get; private set; } = string.Empty;
 
         public PatientBase(string name)
         {
             Name = name;
         }
-
-        public static void ExceptionOutOfScale(float temp)
-        {
-            throw new Exception($"Podana wartość temperatury \"{temp:N1}\" jest poza zakresem termometru.");
-        }
-
-        public string Name { get; private set; } = string.Empty;
-
 
         public abstract void AddBodyTemp(float bodyTemp);
 
@@ -51,8 +33,34 @@
             }
         }
 
+        public abstract bool HasNoData();
         public abstract void PrintAllBodyTemps();
-
         public abstract Statistics GetStatistics();
+
+        public delegate void DangerTempDelegate(float temp, object sender, EventArgs args);
+        public event DangerTempDelegate? DangerTemp;
+        public void SnapEventDangerTemp(float temp)
+        {
+            if (DangerTemp != null)
+            {
+                DangerTemp(temp, this, new EventArgs());
+            }
+        }
+
+        public delegate void NoDataDelegate(object sender, EventArgs args);
+        public event NoDataDelegate? NoData;
+        public void SnapEventNoData()
+        {
+            if (NoData != null)
+            {
+                NoData(this, new EventArgs());
+            }
+        }
+
+        public static void ExceptionOutOfScale(float temp)
+        {
+            throw new Exception($"Podana wartość temperatury \"{temp:N1}\" jest poza zakresem termometru.");
+        }
+
     }
 }
