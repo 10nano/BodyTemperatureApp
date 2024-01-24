@@ -77,8 +77,9 @@ static string SubMenu(IPatient patient, bool isInMemory)
     option4 = "E) Wróć do poprzedniego menu\n";
     patientStr = $"Pacjent {patient.Name} \n";
 
-    string inputTemp = "";
+    patient.NoData += PatientNoData;
 
+    string inputTemp = "";
     bool showMenu = true;
 
     while (showMenu)
@@ -93,16 +94,14 @@ static string SubMenu(IPatient patient, bool isInMemory)
         Screen.ColorWrite(Screen.myInput, patientStr);
         Screen.ColorWrite(Screen.mySubHeader, chooseOption);
 
-        patient.NoData += PatientNoData;
-
         switch (Console.ReadLine().ToUpper())
         {
             case "1": // Dopisz kolejne wartości temperatury ciała
-                Screen.NewLine();
+                Screen.ColorWrite(Screen.myInput, "\n\tZakończ [ENTER]\n");
                 while (true)
                 {
                     Screen.ColorWrite(Screen.myInput, "Podaj poprawnie zmierzoną temperaturę ciała: ");
-                    inputTemp = Console.ReadLine();
+                    inputTemp = Console.ReadLine().ToUpper();
                     if (inputTemp == "")
                     {
                         break;
@@ -113,7 +112,7 @@ static string SubMenu(IPatient patient, bool isInMemory)
                     }
                     catch (Exception exc)
                     {
-                        Screen.ColorWrite(Screen.myExcept, $" Niepoprawne dane: {exc.Message}\n");
+                        Screen.ColorWrite(Screen.myExcept, $"(EXC) Niepoprawne dane: {exc.Message}\n");
                     }
                 }
                 break;
@@ -156,17 +155,17 @@ static string SubMenu(IPatient patient, bool isInMemory)
 
 static void PatientDangerTemp(float temp, object sender, EventArgs args)
 {
-    Screen.ColorWrite(Screen.myEvent, "Proszę natychmiast zgłosić się do lekarza\n" +
-    $"Temperatura {temp:N1} jest niebezpieczna dla życia Pacjenta\n\n");
+    Screen.ColorWrite(Screen.myEvent, "\tProszę natychmiast zgłosić się do lekarza\n" +
+    $"\tTemperatura {temp:N1} jest niebezpieczna dla życia Pacjenta\n\n");
 }
 
 static void PatientFileExist(string fileName, object sender, EventArgs args)
 {
-    Screen.ColorWrite(Screen.myEvent2, $"Pomiar dodano do istniejącego pliku: {fileName}\n");
+    Screen.ColorWrite(Screen.myEvent2, $"\tPomiar dodano do istniejącego pliku: {fileName}\n");
 }
 
 static void PatientNoData(object sender, EventArgs args)
 {
-    Console.Clear();
+    //Console.Clear();
     Screen.ColorWrite(Screen.myEvent2, $"\n\tBRAK DANYCH: Podaj kolejne wartości temperatur\n");
 }
