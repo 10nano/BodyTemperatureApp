@@ -3,15 +3,10 @@
     public class Statistics
     {
         public float Min { get; set; }
-
         public float Max { get; set; }
-
         public float PrevTemp { get; set; }
-
         public bool Rises { get; set; }
-
         public bool NotRises { get; set; }
-
         public int Count { get; set; }
 
         public Statistics()

@@ -84,7 +84,8 @@ static string SubMenu(IPatient patient, bool isInMemory)
 
     while (showMenu)
     {
-        Screen.ClsAppHeader(Screen.myHdFrground, Screen.myHdBkground, $"{progName} - dane zapisywane są {where}\n");
+        Screen.ClsAppHeader(Screen.myHdFrground, Screen.myHdBkground, 
+            $"{progName} - dane zapisywane są {where}\n");
         Screen.NewLine();
         Screen.ColorWrite(Screen.myOption, option1);
         Screen.ColorWrite(Screen.myOption, option2);
@@ -166,6 +167,5 @@ static void PatientFileExist(string fileName, object sender, EventArgs args)
 
 static void PatientNoData(object sender, EventArgs args)
 {
-    //Console.Clear();
     Screen.ColorWrite(Screen.myEvent2, $"\n\tBRAK DANYCH: Podaj kolejne wartości temperatur\n");
 }
